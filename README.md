@@ -22,11 +22,9 @@
 8. **Postman** 
 
 ### Документация
-Sequense diagram.drawio
-openapi.json
-ER-diagram.drawio
-openapi.json
-openapi.yaml
+[openapi.json](https://github.com/pandorria/My-first-System-analysis-project/blob/05bc57168d0e76872c2a9fa048492070bddb5229/openapi.json)
+[ER-diagram](https://github.com/pandorria/My-first-System-analysis-project/blob/05bc57168d0e76872c2a9fa048492070bddb5229/ER-diagram.drawio)
+[openapi.yaml](https://github.com/pandorria/My-first-System-analysis-project/blob/05bc57168d0e76872c2a9fa048492070bddb5229/openapi.yaml)
 
 
 # Вывод
