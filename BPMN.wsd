@@ -1,0 +1,293 @@
+@startuml seq
+==нажать Alt+D для запуска==
+actor Actor as Actor 
+participant AppUI as AppUI #aqua
+participant User as User
+participant Notification as Notification
+participant Parking as Parking
+participant Booking as Booking
+participant Payment as Payment
+participant Map as Map #red
+participant Bank as Bank #yellow
+participant Gate as Gate #green
+
+==Управление доступом==
+==Авторизация пользователя==
+alt Login Success
+Actor -> AppUI ++ : login(mail, password)
+AppUI -> User ++ : verify(mail, password) 
+User --> AppUI  : login successful 
+AppUI --> Actor  : login successful
+else Login Failed
+User --> AppUI -- : login failure 
+AppUI --> Actor -- : login failure
+end
+
+==Регистрация пользователя==
+alt Registration Success
+Actor -> AppUI ++ : insert(mail, password)
+Actor -> AppUI : confirm Tems of Use
+AppUI -> User ++ : createUser
+User -> User : create User id, save info
+User -> Notification ++ : SendNotification
+User --> AppUI  : AddUser success
+AppUI --> Actor  : AddUser success
+Notification -\ Actor --  : on email (Registration Success) 
+else Registration Failed
+User --> AppUI -- : AddUser failure 
+AppUI --> Actor -- : AddUser failure
+end
+
+==Восстановление пароля пользователя==
+alt Recovery Success
+Actor -> AppUI ++ : forgot password (email)
+AppUI -> User ++ : forgot password(email)
+User -> Notification ++ : unique URL
+User --> AppUI  : Recovery success
+AppUI --> Actor  : Recovery success
+Notification -\ Actor --  : on email (unique URL) 
+else Recovery Failed
+User --> AppUI -- : Recovery failure 
+AppUI --> Actor -- : Recovery failure
+end
+alt Change Success
+Actor -> AppUI ++ : Change password
+AppUI -> User ++ : Change password
+User --> AppUI  : Change success
+AppUI --> Actor  : Change success
+else Change Failed
+User --> AppUI -- : Change failure 
+AppUI --> Actor -- : Change failure
+end
+
+==Выход из аккаунта==
+Actor -> AppUI ++ : Log out from account
+AppUI -> User ++ : Log out from account
+User --> AppUI -- : Success
+AppUI --> Actor -- : Success
+
+==Управление профилем==
+==Просмотр профиля пользователя==
+Actor -> AppUI ++ : get Profile Info (user id)
+AppUI -> User ++ : get Profile Info (user id) 
+User --> AppUI -- : Profile Info 
+AppUI --> Actor -- : Profile Info
+
+==Редактирование профиля пользователя==
+alt Change Profile Success
+Actor -> AppUI ++ : change(profile)
+AppUI -> User ++ : change(profile)
+User --> AppUI  : successful 
+AppUI --> Actor  : successful
+else Change Profile Failed
+User --> AppUI -- : Change failure 
+AppUI --> Actor -- : Change failure
+end
+==Управление парковочными местами арендодателя==
+==Просмотр списка парковочных мест арендодателя==
+alt Get ParkingSpace Info
+Actor -> AppUI ++ : get ParkingSpace Info
+AppUI -> User ++ : get ParkingSpace Info
+User --> AppUI  : ParkingSpace Info 
+AppUI --> Actor  : ParkingSpace Info
+else Get ParkingSpace Info Failed
+User --> AppUI -- : No ParkingSpace
+AppUI --> Actor -- : No ParkingSpace Msg
+end
+==Просмотр информации о парковочном месте арендодателя==
+Actor -> AppUI ++ : get ParkingSpace Additional Info (user id, PS id) 
+AppUI -> User ++ : get ParkingSpace Additional Info (user id, PS id)
+User --> AppUI -- : ParkingSpace Additional Info 
+AppUI --> Actor -- : ParkingSpace Additional Info
+
+==Управление парком автомобилей==
+==Просмотр списка автомобилей==
+alt Get ParkingSpace Info
+Actor -> AppUI ++ : get Car Info
+AppUI -> User ++ : get Car Info
+User --> AppUI  : Car Info 
+AppUI --> Actor  : Car Info
+else Get ParkingSpace Info Failed
+User --> AppUI -- : No Car
+AppUI --> Actor -- : No Car Msg
+end
+==Просмотр информации об автомобиле==
+Actor -> AppUI ++ : get Car Additional Info (Car number) 
+AppUI -> User ++ : get Car Additional Info (Car number)
+User --> AppUI -- : Car Additional Info 
+AppUI --> Actor -- : Car Additional Info
+
+==Добавить автомобиль==
+alt AddCar Success
+Actor -> AppUI ++ : add car(number,model)
+AppUI -> User ++ : add car(number,model)
+User -> User : create Car id, save info
+User --> AppUI  : AddCar success
+AppUI --> Actor  : AddCar success
+else AddCar Failed
+User --> AppUI -- : AddCar failure 
+AppUI --> Actor -- : AddCar failure
+end
+
+==Удалить автомобиль==
+Actor -> AppUI ++ : delete car(car id)
+AppUI -> User ++ : delete car(car id)
+User -> User : archive Car id, save info
+User --> AppUI -- : Success
+AppUI --> Actor -- : Success
+
+==Бронирование==
+==Просмотр паркингов на карте города==
+alt Success
+Actor -> AppUI ++ : Open Map
+AppUI -> Parking ++ : Open Map
+Parking -> Map ++ : Open Map (address id, coordinates_id)
+Parking --> AppUI -- : success
+Map --> AppUI : Open Map with parking success
+AppUI --> Actor  : Open Map with parking success
+else Failed
+Map --> AppUI -- : Open Map failure 
+AppUI --> Actor -- : Open Map failure
+end
+
+==Просмотр парковочных мест на схеме паркинга==
+alt Success
+Actor -> AppUI ++ : Open parking_scheme
+AppUI -> Parking ++ : Open parking_scheme
+Parking --> AppUI : Open parking_scheme with parking place success
+AppUI --> Actor  : Open parking_scheme with parking place success
+else Failed
+Parking --> AppUI -- : Open parking_scheme failure 
+AppUI --> Actor -- : Open parking_scheme failure
+end
+
+==Бронирование парковочного места==
+alt Book Success
+Actor -> AppUI ++ : Book a parking place (user id,parking place id,car id)
+AppUI -> User ++ : book (user id, parking place id,car id)
+User -> User : create booking id, save info
+User --> AppUI  : Book success
+AppUI --> Actor  : Book success
+else Book Failed
+User --> AppUI -- : Book failure 
+AppUI --> Actor -- : Book failure
+end
+
+==Оплата бронирования парковочного места==
+alt Pay Success
+Actor -> AppUI ++ : pay for the booking [booking id]
+AppUI -> Booking ++ : pay for the booking [booking id]
+Booking -> Payment ++ : pay for the booking [booking id]
+Payment -> Payment : create payment id,  save info
+Payment -> Bank ++ : create payment id
+group Pay
+Bank --> Actor  : payment id
+end
+Bank --> Payment  : Pay success [payment id]
+Payment --> Booking  : Pay success [payment id]
+Booking --> AppUI  : Pay success
+AppUI --> Actor  : Pay success
+else Pay Failed
+Bank --> Payment -- : Pay failure
+Payment --> Booking -- : Pay failure 
+Booking --> AppUI -- : Pay failure
+AppUI --> Actor -- : Pay failure
+end
+
+==Отмена бронирования парковочного места==
+Actor -> AppUI ++ : UnBook a parking place (booking id)
+AppUI -> Booking ++ : Unbook (booking id)
+Booking --> AppUI -- : Success
+AppUI --> Actor -- : Success
+
+==Отмена оплаченного бронирования парковочного места==
+alt Payback Success
+Actor -> AppUI ++ : UnBook a parking place (booking id)
+AppUI -> Booking ++ : Unbook (booking id)
+Booking -> Booking : check (booking id)
+Booking -> Payment ++ : Unbook (booking id)
+Payment --> Bank ++ : Payback (payment_id)
+Bank  --\ Actor : Payback Success (payment_id)
+Bank --> Payment  : Payback Success
+Payment --> Booking  : Payback Success
+Booking --> AppUI  : Payback Success
+AppUI --> Actor  : Payback Success
+else Payback Failed
+Bank --> Payment -- : Payback Failed
+Payment --> Booking -- : Payback Failed
+Booking --> AppUI -- : Payback Failed
+AppUI --> Actor -- : Payback Failed
+end
+
+==Въезд на паркинг (по талону)==
+alt Open Success
+Actor -> AppUI ++ : Open gate (car_number)
+AppUI -> Booking ++ : verify (car_number) 
+Booking -> Booking : check (booking id, car_number, booking_state_id) 
+Booking -> Gate ++ : Open gate (car_number)
+Gate -> Gate : Check (car_number) 
+Gate --> AppUI -- : Open gate Success
+AppUI --> Actor: Open gate Success
+else Pay Failed
+Booking --> AppUI -- : Failed
+AppUI --> Actor -- : Failed
+end
+
+==Въезд на паркинг (по считыванию номера)==
+alt Open Success
+Actor -> Gate ++ : Open gate (car_number)
+Gate -> Booking ++ : verify (car_number) 
+Booking -> Booking : check (booking id, car_number, booking_state_id) 
+Booking -> Gate  : Open gate (car_number)
+Gate --> Actor : Open gate Success 
+else Pay Failed
+Booking --> Gate -- : Failed
+Gate --> Actor -- : Failed
+end
+
+==Выезд с паркинг==
+alt Open Success
+Actor -> AppUI ++ : Open gate (car_number)
+AppUI -> Booking ++ : verify (car_number) 
+Booking -> Booking : check (booking id, car_number, booking_state_id) 
+Booking -> Gate ++ : Open gate (car_number)
+Gate --> AppUI -- : Open gate Success
+AppUI --> Actor: Open gate Success
+else Pay Failed
+Booking --> AppUI -- : Failed
+AppUI --> Actor -- : Failed (need payd)
+end
+
+==Просмотр списков бронирования==
+alt Open Success
+Actor -> AppUI ++ : get Booking Info (user id)
+AppUI -> Booking ++ : get Booking Info (user id)
+Booking -> Booking : check (user id) 
+Booking --> AppUI : Booking Info 
+AppUI --> Actor: Booking Info 
+else Pay Failed
+Booking --> AppUI -- : Failed
+AppUI --> Actor -- : Failed
+end
+
+==Просмотр информации о бронировании==
+alt Open Success
+Actor -> AppUI ++ : get Booking Info (Booking id)
+AppUI -> Booking ++ : get Booking Info (Booking id)
+Booking -> Booking : check (Booking id) 
+Booking --> AppUI : Booking Info 
+AppUI --> Actor: Booking Info 
+else Pay Failed
+Booking --> AppUI -- : Failed
+AppUI --> Actor -- : Failed
+end
+
+==Просмотр руководства пользователя==
+Actor -> AppUI ++ : get Info
+AppUI --> Actor -- : Info
+
+==Обращение в поддержку==
+Actor -> AppUI ++ : get contact Info
+AppUI --> Actor -- : Info
+
+@enduml
