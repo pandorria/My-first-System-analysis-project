@@ -28,7 +28,7 @@
 2.  [Sequense diagram](https://github.com/pandorria/My-first-System-analysis-project/blob/819365e7d0e66d0c0c2f0539f51232bb7ab7b30a/Sequense%20diagram.drawio) 
 3.  [openapi.json](https://github.com/pandorria/My-first-System-analysis-project/blob/05bc57168d0e76872c2a9fa048492070bddb5229/openapi.json)
 4.  [openapi.yaml](https://github.com/pandorria/My-first-System-analysis-project/blob/05bc57168d0e76872c2a9fa048492070bddb5229/openapi.yaml)
-5.  [BPMN.wsd]https://github.com/pandorria/My-first-System-analysis-project/blob/c70f3b679acb5caf1ea2f034b829662e3ab89694/BPMN.wsd 
+5.  [BPMN.wsd](https://github.com/pandorria/My-first-System-analysis-project/blob/c70f3b679acb5caf1ea2f034b829662e3ab89694/BPMN.wsd) 
 
 
 # Вывод
