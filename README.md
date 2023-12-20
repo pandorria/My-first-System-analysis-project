@@ -3,7 +3,7 @@
 
 
 # Навыки и инструменты
-Вот несколько ключевых навыков и инструментов системного, которые были применены в работе над проектом
+Вот несколько ключевых навыков и инструментов, которые были применены в работе над проектом
 
 ### Навыки:
 
@@ -21,10 +21,12 @@
 7. **MS Excel** 
 8. **Postman** 
 
-### Документация
-[openapi.json](https://github.com/pandorria/My-first-System-analysis-project/blob/05bc57168d0e76872c2a9fa048492070bddb5229/openapi.json)
-[ER-diagram](https://github.com/pandorria/My-first-System-analysis-project/blob/05bc57168d0e76872c2a9fa048492070bddb5229/ER-diagram.drawio)
-[openapi.yaml](https://github.com/pandorria/My-first-System-analysis-project/blob/05bc57168d0e76872c2a9fa048492070bddb5229/openapi.yaml)
+# Документация
+В рамках работы была составлена следуюшая документация
+1.  [ER-diagram](https://github.com/pandorria/My-first-System-analysis-project/blob/05bc57168d0e76872c2a9fa048492070bddb5229/ER-diagram.drawio)
+2.  [Sequense diagram](https://github.com/pandorria/My-first-System-analysis-project/blob/819365e7d0e66d0c0c2f0539f51232bb7ab7b30a/Sequense%20diagram.drawio) 
+3.  [openapi.json](https://github.com/pandorria/My-first-System-analysis-project/blob/05bc57168d0e76872c2a9fa048492070bddb5229/openapi.json)
+4.  [openapi.yaml](https://github.com/pandorria/My-first-System-analysis-project/blob/05bc57168d0e76872c2a9fa048492070bddb5229/openapi.yaml)
 
 
 # Вывод
